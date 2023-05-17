@@ -1,0 +1,26 @@
+{
+  "name": "product_scrape",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "watch": "tsc --watch",
+    "dev": "ts-node src/index.ts",
+    "watch-node": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "puppeteer": "^20.2.1",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.1.7",
+    "typescript": "^5.0.4"
+  }
+}
