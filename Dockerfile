@@ -5,7 +5,12 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy the rest of the application code to the container
 COPY . .
+
+# Run the web service on container startup.
 CMD [ "node", "index.js" ]
