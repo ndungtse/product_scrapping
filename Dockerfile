@@ -13,4 +13,4 @@ RUN yarn install
 COPY . .
 
 # Run the web service on container startup.
-CMD [ "node", "pupetter.js" ]
+CMD [ "node", "index.js" ]

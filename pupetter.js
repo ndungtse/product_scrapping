@@ -5,21 +5,20 @@ const domain = "https://www.amazon.com";
 dotenv.config();
 
 // IIFE
-(async () => {
+export const amazon = async (res) => {
   // wrapper to catch errors
-  try {
+  const browser = await puppeteer.launch({
     // create a new browser instance
-    const browser = await puppeteer.launch({
-      //   args: [
-      //     "--disable-setuid-sandbox",
-      //     "--no-sandbox",
-      //     "--single-process",
-      //     "--no-zygote",
-      //   ],
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-      headless: "new",
-    });
-
+    //   args: [
+    //     "--disable-setuid-sandbox",
+    //     "--no-sandbox",
+    //     "--single-process",
+    //     "--no-zygote",
+    //   ],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    headless: "new",
+  });
+  try {
     // create a page inside the browser;
     const page = await browser.newPage();
     console.log(page);
@@ -63,17 +62,13 @@ dotenv.config();
         })
         .slice(0, 5);
     });
-    console.log('products', products);
-    console.log(
-      products.sort((a, b) => {
-        return a.price - b.price;
-      })
-    );
-
+    console.log("products", products);
+    res.json({ products: products });
     // close the browser
-    await browser.close();
   } catch (error) {
     // display errors
     console.log(error);
+  } finally {
+    await browser.close();
   }
-})();
+};
