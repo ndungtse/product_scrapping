@@ -1,7 +1,9 @@
-const puppeteer = require("puppeteer");
-require("dotenv").config();
+import puppeteer from "puppeteer";
+import dotenv from "dotenv";
+dotenv.config();
 
 const scrapeLogic = async (res) => {
+  console.log(process.env.PUPPETEER_EXECUTABLE_PATH);
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -10,10 +12,11 @@ const scrapeLogic = async (res) => {
       "--no-zygote",
     ],
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    headless: "new",
   });
+  console.log("Browser launched", browser);
   try {
     const page = await browser.newPage();
-
     await page.goto("https://developer.chrome.com/");
 
     // Set screen size
@@ -45,4 +48,4 @@ const scrapeLogic = async (res) => {
   }
 };
 
-module.exports = { scrapeLogic };
+export { scrapeLogic };

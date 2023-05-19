@@ -2,6 +2,7 @@
   "name": "product_scrape",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "test": "jest",
@@ -16,6 +17,7 @@
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
     "puppeteer": "^20.2.1",
+    "selenium-webdriver": "^4.9.2",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
