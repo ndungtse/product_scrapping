@@ -12,5 +12,8 @@ RUN yarn install
 # Copy the rest of the application code to the container
 COPY . .
 
+# Build the application
+RUN yarn build
+
 # Run the web service on container startup.
-CMD [ "node", "index.js" ]
+CMD [ "yarn", "start" ]
