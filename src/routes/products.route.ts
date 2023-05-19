@@ -22,7 +22,9 @@ const getGlobalDealsAPis = async (res: Response, category?: string) => {
     await page.waitForSelector(".row .col");
     console.log("Page loaded");
     const data = await page.evaluate(() => {
-      const products = document.querySelectorAll(".row .col");
+      const products = document.querySelectorAll(
+        ".ebayui-dne-item-featured-card .row .col"
+      );
       const productsArray = Array.from(products)!;
       console.log("Products", productsArray);
       return productsArray.map((product) => {
@@ -36,7 +38,8 @@ const getGlobalDealsAPis = async (res: Response, category?: string) => {
           ".dne-itemtile-price .first"
         )?.textContent;
         const image = (
-          product.querySelector(".slashui-image-cntr img") as HTMLImageElement
+          product.querySelector(".slashui-image-cntr")
+            ?.children[0] as HTMLImageElement
         )?.src;
         return { id, title, price, image };
       });
