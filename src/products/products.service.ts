@@ -52,4 +52,55 @@ export class ProductsService {
       await browser.close();
     }
   }
+
+  async scrapeSubCategories(category?: string) {
+    const browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      headless: 'new',
+    });
+    try {
+      const page = await browser.newPage();
+      console.log('Page opened', page);
+      await page.goto(`https://www.ebay.com/b/${category}/bn_7000259124`, {
+        timeout: 60000,
+      });
+
+      // Wait for the section element containing categories to be visible
+      await page.waitForSelector('section.b-module.b-visualnav');
+
+      // Extract sections with categories
+      const sections = await page.evaluate(() => {
+        const sectionElements = Array.from(
+          document.querySelectorAll('section.b-module.b-visualnav'),
+        );
+
+        return sectionElements.map((sectionElement) => {
+          const heading = sectionElement.querySelector('h2').textContent;
+
+          const categoryElements = Array.from(
+            sectionElement.querySelectorAll('a.b-visualnav__tile'),
+          );
+          const categories = categoryElements.map((categoryElement) => {
+            const title = categoryElement.querySelector(
+              '.b-visualnav__title',
+            ).textContent;
+            const image = categoryElement
+              .querySelector('.b-visualnav__img img')
+              .getAttribute('src');
+
+            return { title, image };
+          });
+
+          return { heading, categories };
+        });
+      });
+
+      return { message: 'Sub Categories', data: sections, success: true };
+    } catch (error) {
+      console.log('Error', error);
+      return { message: 'Sub Categories', data: null, success: false };
+    } finally {
+      await browser.close();
+    }
+  }
 }
