@@ -1,27 +1,27 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { EbayService } from './ebay.service';
 import { ApiTags, ApiResponse as SwaggerResponse } from '@nestjs/swagger';
 import { ApiResponse, responses } from 'src/utils/ApiResponse';
 import { categories } from 'src/utils/shared';
 import { Product } from 'src/models/Product';
 
-@ApiTags('products')
-@Controller('products')
-export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+@ApiTags('Ebay')
+@Controller('products/ebay')
+export class EbayController {
+  constructor(private readonly ebayService: EbayService) {}
 
   @Get('globaldeals')
   @SwaggerResponse({ type: ApiResponse<Product> })
   @SwaggerResponse(responses.fetched)
   async getGlobalDeals() {
-    const data = await this.productsService.getGlobalDeals();
+    const data = await this.ebayService.getGlobalDeals();
     return new ApiResponse(data.message, data.data, data.success);
   }
 
   @Get('globaldeals/:category')
   @SwaggerResponse({ type: ApiResponse })
   async getGlobalDealsByCategory(@Param('category') category: string) {
-    const data = await this.productsService.getGlobalDeals(category);
+    const data = await this.ebayService.getGlobalDeals(category);
     return new ApiResponse(data.message, data.data, data.success);
   }
 
@@ -35,7 +35,7 @@ export class ProductsController {
   @Get('subcategories/:category')
   @SwaggerResponse({ type: ApiResponse })
   async scrapeSubCategories(@Param('category') category: string) {
-    const data = await this.productsService.scrapeSubCategories(category);
+    const data = await this.ebayService.scrapeSubCategories(category);
     return new ApiResponse(data.message, data.data, data.success);
   }
 }

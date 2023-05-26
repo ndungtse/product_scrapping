@@ -8,7 +8,6 @@ async function bootstrap() {
     .setTitle('Product Scrapping apis')
     .setDescription('The product scrapping API documentation')
     .setVersion('1.0')
-    .addBearerAuth()
     .build();
   app.enableCors({
     origin: '*',

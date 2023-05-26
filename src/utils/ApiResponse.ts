@@ -1,9 +1,17 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class ApiResponse<T = any> {
-  constructor(
-    public message: string,
-    public data: T = null,
-    public success?: boolean,
-  ) {}
+  @ApiProperty()
+  public message: string;
+  @ApiProperty()
+  public data: T = null;
+  @ApiProperty()
+  public success?: boolean;
+  constructor(message: string, data: T, success?: boolean) {
+    this.message = message;
+    this.success = success;
+    this.data = data;
+  }
 }
 
 export const responses = {
