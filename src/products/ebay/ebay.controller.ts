@@ -38,4 +38,11 @@ export class EbayController {
     const data = await this.ebayService.scrapeSubCategories(category);
     return new ApiResponse(data.message, data.data, data.success);
   }
+
+  @Get('products/itm/:id')
+  @SwaggerResponse({ type: ApiResponse })
+  async scrapeProduct(@Param('id') id: string) {
+    const data = await this.ebayService.getProductDetails(id);
+    return new ApiResponse(data.message, data.data, data.success);
+  }
 }

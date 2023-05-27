@@ -1,9 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Product } from 'src/models/Product';
 
 export class ApiResponse<T = any> {
   @ApiProperty()
   public message: string;
-  @ApiProperty()
+  @ApiProperty({
+    type: Product,
+    isArray: true,
+    // items:
+  })
   public data: T = null;
   @ApiProperty()
   public success?: boolean;

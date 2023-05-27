@@ -103,4 +103,45 @@ export class EbayService {
       await browser.close();
     }
   }
+
+  async getProductDetails(id: string) {
+    const browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      headless: 'new',
+    });
+    try {
+      const page = await browser.newPage();
+      await page.goto(`https://www.ebay.com/itm/${id}`, {
+        timeout: 60000,
+      });
+      await page.waitForSelector('.x-item-title__mainTitle');
+      await page.waitForSelector('.ux-image-carousel');
+      const data = await page.evaluate(() => {
+        const title = document.querySelector(
+          '.x-item-title__mainTitle span',
+        )?.textContent;
+        const price = document.querySelector(
+          '.x-price-primary span span',
+        )?.textContent;
+        const imageTags = Array.from(
+          document.querySelectorAll('.ux-image-carousel-item img'),
+        );
+        const images = imageTags.map((imageTag) =>
+          imageTag.getAttribute('src'),
+        );
+        const removedNullImages = images.filter((image) => image !== null);
+        // const description = document
+        //   .querySelector('.item-description')
+        //   ?.innerHTML.replace(/(\r\n|\n|\r)/gm, '');
+        // const altImages = Array.from(document.querySelectorAll('.img.img500'));
+        return { title, price, images: removedNullImages, image: images[0] };
+      });
+      return { message: 'Product Details', data, success: true };
+    } catch (error) {
+      console.log('Error', error);
+      return { message: 'Product Details', data: null, success: false };
+    } finally {
+      await browser.close();
+    }
+  }
 }

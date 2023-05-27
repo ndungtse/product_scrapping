@@ -10,12 +10,20 @@ export class AmazonService {
     });
     try {
       const page = await browser.newPage();
-      await page.goto(`https://www.amazon.com/s?k=${searchTerm}`);
+      const url = `https://www.amazon.com/s?k=${searchTerm}`;
+      console.log(url);
+      await page.goto(url, {
+        timeout: 60000,
+      });
+      await page.waitForSelector('.s-result-item');
+      // take a
       const products = await page.evaluate(() => {
         const productNodes = document.querySelectorAll('.s-result-item');
         const productArray = Array.from(productNodes);
+        console.log(productArray);
         const products = productArray.map((product) => {
-          const title = product.querySelector('h2').innerText;
+          const titleHead = product.querySelector('h2');
+          const title = titleHead.querySelector('span').innerText;
           const price = (product.querySelector('.a-price-whole') as any)
             .innerText;
           const image = product.querySelector('img').src;
@@ -28,7 +36,12 @@ export class AmazonService {
       return { message: 'Amazon Search', data: products, success: true };
     } catch (error) {
       console.log(error);
-      return { message: 'Amazon Search', data: null, success: false };
+      return {
+        message: 'Failed to fetch',
+        data: null,
+        success: false,
+        error: error.message,
+      };
     } finally {
       await browser.close();
     }
@@ -41,7 +54,10 @@ export class AmazonService {
     });
     try {
       const page = await browser.newPage();
-      await page.goto(url);
+      await page.goto(url, {
+        timeout: 60000,
+      });
+      await page.waitForSelector('#productTitle');
       const product = await page.evaluate(() => {
         const title = (document.querySelector('#productTitle') as any)
           .innerText;
@@ -71,8 +87,13 @@ export class AmazonService {
         return { title, price, image, specs, about, altImageSrcs };
       });
       return { message: 'Amazon Product', data: product, success: true };
-    } catch (error) {
-      return { message: 'Amazon Product', data: null, success: false };
+    } catch (error: any) {
+      return {
+        message: 'Failed to fetch',
+        data: null,
+        success: false,
+        error: error.message,
+      };
     } finally {
       await browser.close();
     }
