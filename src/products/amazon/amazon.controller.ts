@@ -9,6 +9,14 @@ import { Product } from 'src/models/Product';
 export class AmazonController {
   constructor(private readonly amazonService: AmazonService) {}
 
+  @Get('trending')
+  @SwaggerResponse({ type: ApiResponse<Product> })
+  @SwaggerResponse(responses.fetched)
+  async getTrending() {
+    const data = await this.amazonService.search('trending');
+    return new ApiResponse(data.message, data.data, data.success);
+  }
+
   @Get('search/:keyword')
   @SwaggerResponse({ type: ApiResponse<Product> })
   @SwaggerResponse(responses.fetched)
